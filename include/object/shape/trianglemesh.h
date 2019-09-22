@@ -12,8 +12,10 @@ This header file defines the basic interface of a trianglemesh, constructed from
 struct SimplifyCompare{
     int A, B;
     Point C;
+    HomoMatrix Q;
     float val;
     SimplifyCompare(const int &x, const int &y, const Point &z, const float &v):A(x), B(y), C(z), val(v){}
+    SimplifyCompare(const int &x, const int &y, const Point &z, const float &v, const HomoMatrix &q):A(x), B(y), C(z), val(v), Q(q){}
     bool operator<(const SimplifyCompare &b)const{return val > b.val;}
 };
 
@@ -50,7 +52,8 @@ public:
     virtual float sample(Point &p, Normal &n);
 
     // simplify using quadric error metrices
-    virtual void simplify(const float &threshold, const int &pointsLeft);
+    void constructMIDV(const Point &V1, const Point &V2, const HomoMatrix &Q, Point &v, float &err);
+    virtual void simplify(const float &threshold, const float &pointsLeft);
 };
 
 #endif

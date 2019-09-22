@@ -146,9 +146,28 @@ int getf(int x, unsigned int *prt){
 }
 
 /*
+* construct the minimal v
+*/
+void TriangleMesh::constructMIDV(const Point &V1, const Point &V2, const HomoMatrix &Q, Point &v, float &err){
+    float detQ = Q.val(1, 1) * Q.val(2, 2) * Q.val(3, 3) - Q.val(1, 1) * Q.val(2, 3) * Q.val(2, 3) - Q.val(1, 2) * Q.val(1, 2) * Q.val(3, 3) + Q.val(1, 3) * Q.val(1, 2) * Q.val(2, 3) * 2 - Q.val(1, 3) * Q.val(2, 2) * Q.val(1, 3);
+    float v1 = - Q.val(1, 2) * Q.val(2, 3) * Q.val(3, 4) - Q.val(1, 3) * Q.val(2, 4) * Q.val(2, 3) - Q.val(1, 4) * Q.val(2, 2) * Q.val(3, 3) + Q.val(1, 4) * Q.val(2, 3) * Q.val(2, 3) + Q.val(1, 3) * Q.val(2, 2) * Q.val(3, 4) + Q.val(1, 2) * Q.val(2, 4) * Q.val(3, 3);
+    float v2 = Q.val(1, 1) * Q.val(2, 3) * Q.val(3, 4) + Q.val(1, 3) * Q.val(2, 4) * Q.val(1, 3) + Q.val(1, 4) * Q.val(1, 2) * Q.val(3, 3) - Q.val(1, 4) * Q.val(2, 3) * Q.val(1, 3) - Q.val(1, 3) * Q.val(1, 2) * Q.val(3, 4) - Q.val(1, 1) * Q.val(2, 4) * Q.val(3, 3);
+    float v3 = - Q.val(1, 1) * Q.val(2, 2) * Q.val(3, 4) - Q.val(1, 2) * Q.val(2, 4) * Q.val(1, 3) - Q.val(1, 4) * Q.val(1, 2) * Q.val(2, 3) + Q.val(1, 4) * Q.val(2, 2) * Q.val(1, 3) + Q.val(1, 2) * Q.val(1, 2) * Q.val(3, 4) + Q.val(1, 1) * Q.val(2, 4) * Q.val(2, 3);
+    float v4 = Q.val(1, 1) * Q.val(2, 2) * Q.val(3, 3) + Q.val(1, 2) * Q.val(2, 3) * Q.val(1, 3) + Q.val(1, 3) * Q.val(1, 2) * Q.val(2, 3) - Q.val(1, 3) * Q.val(2, 2) * Q.val(1, 3) - Q.val(1, 2) * Q.val(1, 2) * Q.val(3, 3) - Q.val(1, 1) * Q.val(2, 3) * Q.val(2, 3);
+    HomoVector vx(v1 / detQ, v2 / detQ, v3 / detQ, v4 / detQ);
+    
+    if (fabs(detQ) > 1e-5) v = Point(vx.x(), vx.y(), vx.z());
+    else v = 0.5 * (V1 + V2);
+    err = v * (Q * v); 
+    //printf("%f %f\n", detQ, err);
+}
+
+
+
+/*
 * simplify using quadric error metrics
 */
-void TriangleMesh::simplify(const float &threshold, const int &pointsLeft){
+void TriangleMesh::simplify(const float &threshold, const float &pointsLeft){
     std::priority_queue<SimplifyCompare> q;
     std::vector<int> *ptn = new std::vector<int>[npoints * 2];
     unsigned int *pointBelong = new unsigned int[npoints * 2];
@@ -161,6 +180,7 @@ void TriangleMesh::simplify(const float &threshold, const int &pointsLeft){
         pointBelong[i] = i;
         ptn[i].clear();
     }
+    Point vn; float err;
     for (unsigned int i = 0; i < nmesh; i++) {
         HomoVector q = meshes[i].surfaceEqua();
         HomoMatrix Q = HomoMatrix(q.x()*q.x(), q.x()*q.y(), q.x()*q.z(), q.x()*q.k(),
@@ -177,26 +197,33 @@ void TriangleMesh::simplify(const float &threshold, const int &pointsLeft){
     a->surfBuild(ptn, threshold);
     for (unsigned int i = 1; i <= tot; i++)
         for (unsigned int j = 0; j < ptn[i].size(); j++){
-            Point md = Point(0.5*(points[i].x()+points[ptn[i][j]].x()), 0.5*(points[i].y()+points[ptn[i][j]].y()), 0.5*(points[i].z()+points[ptn[i][j]].z()));
-            if(i < ptn[i][j])q.push(SimplifyCompare(i, ptn[i][j], md, (points[i]-points[ptn[i][j]]).length()));
+            constructMIDV(points[i], points[ptn[i][j]], pointQ[i] + pointQ[ptn[i][j]], vn, err);
+            //Point md = Point(0.5*(points[i].x()+points[ptn[i][j]].x()), 0.5*(points[i].y()+points[ptn[i][j]].y()), 0.5*(points[i].z()+points[ptn[i][j]].z()));
+            if(i < ptn[i][j])q.push(SimplifyCompare(i, ptn[i][j], vn, err, pointQ[i] + pointQ[ptn[i][j]]));
         }
-    unsigned int epcs = npoints - pointsLeft;
+    unsigned int epcs = npoints * (1 - pointsLeft);
     if (npoints < pointsLeft) epcs = 0;
     for (unsigned int ep = 0; ep < epcs; ep++){
         SimplifyCompare tp = q.top(); q.pop();
         while(getf(tp.A, pointBelong) != tp.A || getf(tp.B, pointBelong) != tp.B){tp = q.top(); q.pop();}
         points[++tot] = tp.C;
+        pointQ[tot] = tp.Q;
+        //printf("%f\n", tp.val);
         for (unsigned int j = 0; j < ptn[tp.A].size(); j++){
             int k = getf(ptn[tp.A][j], pointBelong);
+            if (k == tp.B) continue;
             ptn[tot].push_back(k);
-            Point md = Point(0.5*(tp.C.x()+points[k].x()), 0.5*(tp.C.y()+points[k].y()), 0.5*(tp.C.z()+points[k].z()));
-            q.push(SimplifyCompare(tot, k, md, (tp.C-points[k]).length()));
+            constructMIDV(points[tot], points[k], pointQ[tot] + pointQ[k], vn, err);
+            //Point md = Point(0.5*(tp.C.x()+points[k].x()), 0.5*(tp.C.y()+points[k].y()), 0.5*(tp.C.z()+points[k].z()));
+            q.push(SimplifyCompare(tot, k, vn, err, pointQ[tot] + pointQ[k]));
         }
         for (unsigned int j = 0; j < ptn[tp.B].size(); j++){
             int k = getf(ptn[tp.B][j], pointBelong);
+            if (k == tp.A) continue;
             ptn[tot].push_back(k);
-            Point md = Point(0.5*(tp.C.x()+points[k].x()), 0.5*(tp.C.y()+points[k].y()), 0.5*(tp.C.z()+points[k].z()));
-            q.push(SimplifyCompare(tot, k, md, (tp.C-points[k]).length()));
+            constructMIDV(points[tot], points[k], pointQ[tot] + pointQ[k], vn, err);
+            //Point md = Point(0.5*(tp.C.x()+points[k].x()), 0.5*(tp.C.y()+points[k].y()), 0.5*(tp.C.z()+points[k].z()));
+            q.push(SimplifyCompare(tot, k, vn, err, pointQ[tot] + pointQ[k]));
         }
         pointBelong[tp.A] = pointBelong[tp.B] = tot;
     }

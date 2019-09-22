@@ -1,3 +1,7 @@
+# Importance
+
+chishiki rebuild started. Instead of building a scalable high-efficiency renderer, the improvement of the debuggability are now regarded as the core goal of this project.
+
 # chishiki
 chishiki is a rendering engine combining traditional rendering methods (monte carlo ray tracing and so on) and some new methods such as deep shading. All rendering methods will be given with a mathemetical analysis, and it will help a lot in understanding the methods.
 Scalability is the most important feature of chishiki. The author build this rendering engine for convenience in computer graphics research.
@@ -8,9 +12,7 @@ The Design of Code Structure is mainly for scalability. Visit https://factorialn
 
 ## Supporting
 
-### Algorithms
-
-Path Tracing
+###  
 
 ### Shape
 

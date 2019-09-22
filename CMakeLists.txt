@@ -73,6 +73,7 @@ add_executable(chishiki
   include/rendering/integrator/integratorhead.h
   include/rendering/integrator/integratorbase.h
   include/rendering/integrator/normalint.h
+  include/rendering/integrator/normaldiff.h
   include/rendering/integrator/aoint.h
   include/rendering/integrator/rtint.h
   include/rendering/integrator/whittedint.h
@@ -117,6 +118,7 @@ add_executable(chishiki
   src/object/scene.cpp
 
   src/rendering/integrator/normalint.cpp
+  src/rendering/integrator/normaldiff.cpp
   src/rendering/integrator/aoint.cpp
   src/rendering/integrator/rtint.cpp
   src/rendering/integrator/whittedint.cpp

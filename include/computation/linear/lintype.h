@@ -22,7 +22,7 @@ class Point : public HomoVector{
 public:
     Point():HomoVector(0.0, 0.0, 0.0, 1.0){}
     Point(const float &x, const float &y, const float &z):HomoVector(x, y, z, 1.0){}
-    Point(const HomoVector& b):HomoVector(b.x(), b.y(), b.z(), 1.0){normalize();}
+    Point(const HomoVector& b):HomoVector(b.x(), b.y(), b.z(), 1.0){}
 };
 
 /*

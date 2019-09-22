@@ -52,7 +52,7 @@ public:
     void addBSSRDF(BSSRDF *b);
     BSSRDF* getBSSRDF();
 
-    virtual void simplify(const float &threshold, const int &pointsLeft) = 0;
+    virtual void simplify(const float &threshold, const float &pointsLeft) = 0;
 
 };
 

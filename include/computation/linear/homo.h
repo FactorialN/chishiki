@@ -118,14 +118,16 @@ public:
     /*
     * Matrix multiply operation.
     */
-    HomoMatrix operator*(const HomoMatrix &b);
-    HomoVector operator*(const HomoVector &b);
+    HomoMatrix operator*(const HomoMatrix &b)const;
+    HomoVector operator*(const HomoVector &b)const;
 
     /*
     * Basic Matrix calculations.
     */
     HomoMatrix transpose();
     HomoMatrix reverse();
+
+    inline float val(const int &x, const int &y)const{return v[x - 1][y - 1];}
     
 private:
 

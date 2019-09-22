@@ -4,6 +4,7 @@
 #include <rendering/integrator/integratorbase.h>
 #include <rendering/integrator/aoint.h>
 #include <rendering/integrator/normalint.h>
+#include <rendering/integrator/normaldiff.h>
 #include <rendering/integrator/rtint.h>
 #include <rendering/integrator/whittedint.h>
 #include <rendering/integrator/volint.h>

@@ -9,7 +9,7 @@ HomoMatrix HomoMatrix::operator+(const HomoMatrix &b){
     return c;
 }
 
-HomoMatrix HomoMatrix::operator*(const HomoMatrix &b){
+HomoMatrix HomoMatrix::operator*(const HomoMatrix &b)const{
     float d[4][4] = {0};
     for (unsigned int i = 0; i < 4; i++)
         for (unsigned int j = 0; j < 4; j++)
@@ -19,7 +19,7 @@ HomoMatrix HomoMatrix::operator*(const HomoMatrix &b){
     return c;
 }
 
-HomoVector HomoMatrix::operator*(const HomoVector &b){
+HomoVector HomoMatrix::operator*(const HomoVector &b)const{
     float d[4] = {0};
     for (unsigned int i = 0; i < 4; i++)
         d[i] += v[i][0] * b.x() + v[i][1] * b.y() + v[i][2] * b.z() + v[i][3] * b.k();
@@ -57,7 +57,7 @@ HomoVector operator-(const HomoVector &a, const HomoVector &b){
     return HomoVector(a.x() - b.x(), a.y() - b.y(), a.z() - b.z(), a.k() - b.k());
 }
 float operator*(const HomoVector &a, const HomoVector &b){
-    return a.x() * b.x() + a.y() * b.y() + a.z() * b.z();
+    return a.x() * b.x() + a.y() * b.y() + a.z() * b.z() + a.k() * b.k();
 }
 HomoVector operator%(const HomoVector &a, const HomoVector &b){
     return HomoVector(a.y() * b.z() - a.z() * b.y(), a.z() * b.x() - a.x() * b.z(), a.x() * b.y() - a.y() * b.x(), 0.0);

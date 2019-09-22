@@ -29,6 +29,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/Users/factorialn/CLionProjects/chishiki/src/object/shape/sphere.cpp" "/Users/factorialn/CLionProjects/chishiki/build/CMakeFiles/chishiki.dir/src/object/shape/sphere.cpp.o"
   "/Users/factorialn/CLionProjects/chishiki/src/object/shape/trianglemesh.cpp" "/Users/factorialn/CLionProjects/chishiki/build/CMakeFiles/chishiki.dir/src/object/shape/trianglemesh.cpp.o"
   "/Users/factorialn/CLionProjects/chishiki/src/rendering/integrator/aoint.cpp" "/Users/factorialn/CLionProjects/chishiki/build/CMakeFiles/chishiki.dir/src/rendering/integrator/aoint.cpp.o"
+  "/Users/factorialn/CLionProjects/chishiki/src/rendering/integrator/normaldiff.cpp" "/Users/factorialn/CLionProjects/chishiki/build/CMakeFiles/chishiki.dir/src/rendering/integrator/normaldiff.cpp.o"
   "/Users/factorialn/CLionProjects/chishiki/src/rendering/integrator/normalint.cpp" "/Users/factorialn/CLionProjects/chishiki/build/CMakeFiles/chishiki.dir/src/rendering/integrator/normalint.cpp.o"
   "/Users/factorialn/CLionProjects/chishiki/src/rendering/integrator/rtint.cpp" "/Users/factorialn/CLionProjects/chishiki/build/CMakeFiles/chishiki.dir/src/rendering/integrator/rtint.cpp.o"
   "/Users/factorialn/CLionProjects/chishiki/src/rendering/integrator/volint.cpp" "/Users/factorialn/CLionProjects/chishiki/build/CMakeFiles/chishiki.dir/src/rendering/integrator/volint.cpp.o"

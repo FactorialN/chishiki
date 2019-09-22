@@ -32,7 +32,7 @@ public:
     // sample points
     virtual float sample(Point &p, Normal &n);
 
-    virtual void simplify(const float &threshold, const int &pointsLeft){}
+    virtual void simplify(const float &threshold, const float &pointsLeft){}
 };
 
 #endif

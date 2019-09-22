@@ -97,6 +97,7 @@ Analyse::Analyse(char *fn){
             line >> pref;
             if (pref == "Whitted") camera->addInt(new WhittedIntegrator());
             else if (pref == "Normal") camera->addInt(new NormalIntegrator());
+            else if (pref == "NormalDiff") camera->addInt(new NormalDiffIntegrator());
             else if (pref == "Ao") camera->addInt(new AoIntegrator());
             else if (pref == "Rt") camera->addInt(new RtIntegrator());
             else if (pref == "Volume") camera->addInt(new VolIntegrator());
@@ -111,8 +112,7 @@ Analyse::Analyse(char *fn){
         }
         else if (pref == "Simplify"){
             isSimplify = true;
-            float x;
-            int y;
+            float x, y;
             line >> pref >> x >> y;
             Shape *shape;
             char *ch = const_cast<char*>(pref.c_str());
