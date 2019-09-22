@@ -1,4 +1,4 @@
-# Importance
+# Important
 
 chishiki rebuild started. Instead of building a scalable high-efficiency renderer, the improvement of the debuggability are now regarded as the core goal of this project.
 
