@@ -1,3 +1,0 @@
-/Users/factorialn/CLionProjects/chishiki/build/CMakeFiles/rebuild_cache.dir
-/Users/factorialn/CLionProjects/chishiki/build/CMakeFiles/edit_cache.dir
-/Users/factorialn/CLionProjects/chishiki/build/CMakeFiles/chishiki.dir
